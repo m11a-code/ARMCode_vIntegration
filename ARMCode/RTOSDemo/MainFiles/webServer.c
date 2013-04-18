@@ -12,6 +12,7 @@
 #include "semphr.h"
 
 /* include files. */
+#include "LCDtask.h"
 #include "vtUtilities.h"
 #include "myTypes.h"
 #include "webServer.h"
@@ -40,7 +41,7 @@ static portTASK_FUNCTION_PROTO( vWebServerTask, pvParameters );
 
 /*-----------------------------------------------------------*/
 // Public API
-void vStartWebServerTask(webServerStruct *params, unsigned portBASE_TYPE uxPriority, myI2CStruct *myi2c)
+void vStartWebServerTask(webServerStruct *params, unsigned portBASE_TYPE uxPriority, myI2CStruct *myi2c, vtLCDStruct *lcd)
 {
     // Create the queue that will be used to talk to this task
     if ((params->inQ = xQueueCreate(webServerQLen,sizeof(webServerMsg))) == NULL) {
@@ -49,6 +50,7 @@ void vStartWebServerTask(webServerStruct *params, unsigned portBASE_TYPE uxPrior
     /* Start the task */
     portBASE_TYPE retval;
     params->i2cData = myi2c;
+    params->lcdData = lcd;
     if ((retval = xTaskCreate( vWebServerTask, ( signed char * ) "Web Server", conSTACK_SIZE, (void *) params, uxPriority, ( xTaskHandle * ) NULL )) != pdPASS) {
         VT_HANDLE_FATAL_ERROR(TASK_CREATION_ERROR);
     }
@@ -226,6 +228,7 @@ int getMsgType(webServerMsg *webServerBuf)
 
 static webServerStruct *param;
 static myI2CStruct *i2cData;
+static vtLCDStruct *lcdData;
 
 // Buffer for receiving messages
 webServerMsg msgBuffer;
@@ -237,6 +240,7 @@ static portTASK_FUNCTION( vWebServerTask, pvParameters )
     param = (webServerStruct *) pvParameters;
     // Get the I2C task pointer
     i2cData = param->i2cData;
+    lcdData = param->lcdData;
 
     // Like all good tasks, this should never exit
     for(;;)
@@ -248,7 +252,10 @@ static portTASK_FUNCTION( vWebServerTask, pvParameters )
         switch(getMsgType(&msgBuffer)){
             case webNotifyCurrentSpeedMsgType:
             {
-                //sendi2cWebServerMsg(i2cData, 1, 1, portMAX_DELAY);
+                sendLCDCurrentSpeed(lcdData, getCurrentSpeedInfo(&msgBuffer));
+                sendi2cWebServerMsg(i2cData, 2, 1, portMAX_DELAY);
+                //printf("Right:  FS = %d    BS = %d    dist = %d    angle = %d\n", FS,BS, distance, angle);
+                //sendLCDDebugString(lcdData, 3, buffer, 18);
                 break;
             }
             case webNotifySpeedLimitZoneMsgType:

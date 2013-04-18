@@ -3,6 +3,7 @@
 #define WEB_SERVER_H
 #include "myTypes.h"
 #include "i2c_ARM.h"
+#include "LCDtask.h"
 
 #define maxWebServerMsgLen 9
 
@@ -14,7 +15,7 @@
 //   mapData: Data structure used by the task
 //   uxPriority -- the priority you want this task to be run at
 //   navData: pointer to the data structure for the navigation task
-void vStartWebServerTask(webServerStruct *webServerData, unsigned portBASE_TYPE uxPriority, myI2CStruct *myi2c);
+void vStartWebServerTask(webServerStruct *webServerData, unsigned portBASE_TYPE uxPriority, myI2CStruct *myi2c, vtLCDStruct *lcdData);
 
 //Notify the web server of the current speed, 0xFF is the maximum
 portBASE_TYPE webNotifyCurrentSpeed(webServerStruct *webServerData, uint8_t speed);

@@ -295,7 +295,7 @@ static portTASK_FUNCTION( vLCDUpdateTask, pvParameters )
     GLCD_Clear(screenColor);
 
     //Set up constant text fields
-    GLCD_DisplayString(LINE,0,1, (unsigned char*) "^_^");
+    //GLCD_DisplayString(LINE,0,1, (unsigned char*) "^_^");
 
     // This task should never exit
     for(;;)
@@ -308,7 +308,9 @@ static portTASK_FUNCTION( vLCDUpdateTask, pvParameters )
             case sendLCDCurrentSpeedMsgType: {
                 char string[4];
                 sprintf(string, "%3d", msgBuffer.buf[0]);
-                GLCD_DisplayString(LINE,0,1, (unsigned char*) string);
+                GLCD_DisplayString(1,0,1, (unsigned char*) string);
+                //GLCD_DisplayString(LINE,0,1, (unsigned char*) string);
+                //GLCD_DisplayString(1,0,1,(unsigned char *)msgBuffer.buf);
                 break;
             }
             case sendLCDDebugMsg: {

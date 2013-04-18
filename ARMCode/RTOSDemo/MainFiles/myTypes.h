@@ -7,6 +7,7 @@
 // Our data structures for our tasks:
 typedef struct __webServerStruct{
     myI2CStruct *i2cData;
+    vtLCDStruct *lcdData;
     xQueueHandle inQ;
 } webServerStruct;
 

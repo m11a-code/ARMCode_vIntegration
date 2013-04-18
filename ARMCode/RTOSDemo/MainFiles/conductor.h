@@ -10,6 +10,7 @@
 #include "speedLimit.h"
 #include "power.h"
 #include "LCDtask.h"
+#include "webServer.h"
 
 // Structure used to pass parameters to the task
 // Do not touch...
@@ -21,6 +22,7 @@ typedef struct __ConductorStruct {
     speedLimitControlStruct *speedData;
     powerStruct *powerData;
     vtLCDStruct *lcdData;
+    webServerStruct *webData;
 } vtConductorStruct;
 
 // Public API
@@ -38,6 +40,6 @@ typedef struct __ConductorStruct {
 //   speedData: pointer to the data structure for the speed limit control task
 //   powerData: pointer to the data structure for the power analysis task
 //   lcdData: pointer to the data structure for the LCD task
-void vStartConductorTask(vtConductorStruct *conductorData, unsigned portBASE_TYPE uxPriority, vtI2CStruct *i2c, myI2CStruct * myi2c, motorControlStruct *motorControl, irControlStruct *irData, speedLimitControlStruct *speedData, powerStruct *powerData, vtLCDStruct *lcdData);
+void vStartConductorTask(vtConductorStruct *conductorData, unsigned portBASE_TYPE uxPriority, vtI2CStruct *i2c, myI2CStruct * myi2c, motorControlStruct *motorControl, irControlStruct *irData, speedLimitControlStruct *speedData, powerStruct *powerData, vtLCDStruct *lcdData, webServerStruct *webData);
 
 #endif

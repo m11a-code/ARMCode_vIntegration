@@ -274,6 +274,7 @@ void getParam(char *data, char *param, char *out) {
 }
 
 #include "myTypes.h"
+#include "webServer.h"
 static webServerStruct *webStruct;
 void setUiPWebServer(webServerStruct *web) {
     webStruct = web;
@@ -287,30 +288,30 @@ extern void vParTestSetLEDState( long lState );
 	/* Process the form input sent by the IO page of the served HTML. */
 
     webNotifyCurrentSpeed(webStruct, 1);
-	c = strstr( pcInputString, "?" );
-    if( c )
-    {
-		static char from[30];
-	    static char to[30];
-	    static char sub[30];
-	    static char msg[30];
-	    static char key[30];
-
-	    getParam(c, "from=", from);
-	    getParam(c, "to=", to);
-	    getParam(c, "sub=", sub);
-	    getParam(c, "msg=", msg);
-	    getParam(c, "key=", key);
-		/* Turn the FIO1 LED's on or off in accordance with the check box status. */
-		if( strstr( msg, "on" ) != NULL )
-		{
-			vParTestSetLEDState( pdTRUE );
-		}
-		else
-		{
-			vParTestSetLEDState( pdFALSE );
-		}
-    }
+//	c = strstr( pcInputString, "?" );
+//    if( c )
+//    {
+//		static char from[30];
+//	    static char to[30];
+//	    static char sub[30];
+//	    static char msg[30];
+//	    static char key[30];
+//
+//	    getParam(c, "from=", from);
+//	    getParam(c, "to=", to);
+//	    getParam(c, "sub=", sub);
+//	    getParam(c, "msg=", msg);
+//	    getParam(c, "key=", key);
+//		/* Turn the FIO1 LED's on or off in accordance with the check box status. */
+//		if( strstr( msg, "on" ) != NULL )
+//		{
+//			vParTestSetLEDState( pdTRUE );
+//		}
+//		else
+//		{
+//			vParTestSetLEDState( pdFALSE );
+//		}
+//    }
 }
 
 

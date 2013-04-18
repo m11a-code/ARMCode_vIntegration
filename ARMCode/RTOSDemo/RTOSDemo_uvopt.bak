@@ -1304,48 +1304,6 @@
       <ActiveTab>0</ActiveTab>
       <Documents>
         <Doc>
-          <Name>../NXPDrivers/source/lpc17xx_i2c.c</Name>
-          <ColumnNumber>0</ColumnNumber>
-          <TopLine>873</TopLine>
-          <CurrentLine>873</CurrentLine>
-        </Doc>
-        <Doc>
-          <Name>.\MainFiles/conductor.c</Name>
-          <ColumnNumber>11</ColumnNumber>
-          <TopLine>190</TopLine>
-          <CurrentLine>190</CurrentLine>
-        </Doc>
-        <Doc>
-          <Name>.\MainFiles/i2c_ARM.c</Name>
-          <ColumnNumber>94</ColumnNumber>
-          <TopLine>39</TopLine>
-          <CurrentLine>45</CurrentLine>
-        </Doc>
-        <Doc>
-          <Name>.\MainFiles/LCDtask.c</Name>
-          <ColumnNumber>0</ColumnNumber>
-          <TopLine>293</TopLine>
-          <CurrentLine>293</CurrentLine>
-        </Doc>
-        <Doc>
-          <Name>.\MainFiles/irControl.c</Name>
-          <ColumnNumber>17</ColumnNumber>
-          <TopLine>267</TopLine>
-          <CurrentLine>273</CurrentLine>
-        </Doc>
-        <Doc>
-          <Name>.\MainFiles/navigation.c</Name>
-          <ColumnNumber>0</ColumnNumber>
-          <TopLine>279</TopLine>
-          <CurrentLine>285</CurrentLine>
-        </Doc>
-        <Doc>
-          <Name>.\MainFiles/webServer.c</Name>
-          <ColumnNumber>34</ColumnNumber>
-          <TopLine>251</TopLine>
-          <CurrentLine>253</CurrentLine>
-        </Doc>
-        <Doc>
           <Name>.\MainFiles/main.c</Name>
           <ColumnNumber>0</ColumnNumber>
           <TopLine>227</TopLine>

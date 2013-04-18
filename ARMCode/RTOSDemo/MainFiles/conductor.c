@@ -22,6 +22,7 @@
 #include "speedLimit.h"
 #include "power.h"
 #include "LCDtask.h"
+#include "webServer.h"
 
 /* *********************************************** */
 // Definitions and data structures that are private to this file
@@ -43,7 +44,7 @@ static portTASK_FUNCTION_PROTO( vConductorUpdateTask, pvParameters );
 
 /*-----------------------------------------------------------*/
 // Public API
-void vStartConductorTask(vtConductorStruct *params, unsigned portBASE_TYPE uxPriority, vtI2CStruct *i2c, myI2CStruct * myi2c, motorControlStruct *motorControl, irControlStruct *irData, speedLimitControlStruct *speedData, powerStruct *powerData, vtLCDStruct *lcdData)
+void vStartConductorTask(vtConductorStruct *params, unsigned portBASE_TYPE uxPriority, vtI2CStruct *i2c, myI2CStruct * myi2c, motorControlStruct *motorControl, irControlStruct *irData, speedLimitControlStruct *speedData, powerStruct *powerData, vtLCDStruct *lcdData, webServerStruct *webData)
 {
 	/* Start the task */
 	portBASE_TYPE retval;
@@ -54,6 +55,7 @@ void vStartConductorTask(vtConductorStruct *params, unsigned portBASE_TYPE uxPri
 	params->speedData = speedData;
 	params->powerData = powerData;
 	params->lcdData = lcdData;
+	params->webData = webData;
 	if ((retval = xTaskCreate( vConductorUpdateTask, ( signed char * ) "Conductor", conSTACK_SIZE, (void *) params, uxPriority, ( xTaskHandle * ) NULL )) != pdPASS) {
 		VT_HANDLE_FATAL_ERROR(retval);
 	}
@@ -92,6 +94,7 @@ static irControlStruct *irData;
 static speedLimitControlStruct *speedData;
 static powerStruct *powerData;
 static vtLCDStruct *lcdData;
+static webServerStruct *webData;
 
 static uint8_t colorSensorMsgCount, encodersMsgCount, IRMsgCount, ADCMsgCount, powerMsgCount, recvMsgType, rxLen, status, Buffer[vtI2CMLen];
 
@@ -114,6 +117,8 @@ static portTASK_FUNCTION( vConductorUpdateTask, pvParameters )
 	powerData = param->powerData;
 	// Get the LCD pointer information
 	lcdData = param->lcdData;
+	// Get the web server pointer information
+	webData = param->webData;
 
 	// Message counts
 	colorSensorMsgCount = 0, encodersMsgCount = 0, IRMsgCount = 0, ADCMsgCount = 0, powerMsgCount = 0, recvMsgType = 0;		// The value 0 is a temporary initial value for recvMsgType, rxLen; it's overwritten when vtI2CDeQ occurs.

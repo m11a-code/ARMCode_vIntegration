@@ -145,6 +145,7 @@ static void prvSetupHardware( void );
  */
 extern void vuIP_Task( void *pvParameters );
 extern void vuIP_SetLCD( void *lcdParams );
+extern void setUiPWebServer( webServerStruct *web );
 
 /*
  * The task that handles the USB stack.
@@ -217,7 +218,7 @@ int main( void )
 	}
 
 	// start up a "conductor" task that will move messages around
-	vStartConductorTask(&conductorData,mainCONDUCTOR_TASK_PRIORITY,&vtI2C0,&i2cData,&motorControl,&irData,&speedData,&powerData,&vtLCDdata);
+	vStartConductorTask(&conductorData,mainCONDUCTOR_TASK_PRIORITY,&vtI2C0,&i2cData,&motorControl,&irData,&speedData,&powerData,&vtLCDdata,&webData);
 
     // Start the I2C task
     starti2cTask(&i2cData,mainI2C_TASK_PRIORITY,&vtI2C0);
@@ -229,6 +230,8 @@ int main( void )
     vStartIRTask(&irData,mainIR_CONTROL_TASK_PRIORITY,&navData,&vtLCDdata);
     // Start the Speed Limit task
     vStartSpeedLimitTask(&speedData,mainSPEED_LIMIT_TASK_PRIORITY,&motorControl,&navData,&webData);
+    // Start the web server task
+    vStartWebServerTask(& webData, mainWEB_SERVER_TASK_PRIORITY, &i2cData, &vtLCDdata);
 
     setUiPWebServer(&webData);
     xTaskCreate( vuIP_Task, ( signed char * ) "uIP", mainBASIC_WEB_STACK_SIZE, ( void * ) NULL, mainUIP_TASK_PRIORITY, NULL );

@@ -131,6 +131,29 @@ portBASE_TYPE sendi2cMotorMsg(myI2CStruct *i2cData, uint8_t leftValue, uint8_t r
     return(xQueueSend(i2cData->inQ,(void *) (&buffer),ticksToBlock));
 }
 
+portBASE_TYPE sendi2cWebServerMsg(myI2CStruct *i2cData, uint8_t valueOne, uint8_t valueTwo, portTickType ticksToBlock)
+{
+    if (i2cData == NULL) {
+        VT_HANDLE_FATAL_ERROR(0);
+    }
+    myi2cMsg buffer;
+    buffer.length = 8;
+    if (buffer.length > vti2cMaxLen) {
+        // no room for this message
+        VT_HANDLE_FATAL_ERROR(INCORRECT_I2C_MSG_FORMAT);
+    }
+    buffer.buf[0] = 0xBB;       //i2c id
+    buffer.buf[1] = 0x05;       //class id
+    buffer.buf[2] = 0x04;       //parity
+    buffer.buf[3] = 0x03;       //count
+    buffer.buf[4] = valueOne;  //data[0]
+    buffer.buf[5] = valueTwo; //data[1]
+    buffer.buf[6] = 0xFF;       //data[2]
+    buffer.buf[7] = 0xFF;       //data[3]
+    buffer.msgType = vtI2CWebServerMsgType;
+    return(xQueueSend(i2cData->inQ,(void *) (&buffer),ticksToBlock));
+}
+
 portBASE_TYPE notifyRequestRecvd(myI2CStruct *i2cData,portTickType ticksToBlock)
 {
     if (i2cData == NULL) {
@@ -201,11 +224,20 @@ static portTASK_FUNCTION( vi2cUpdateTask, pvParameters )
             case vtI2CMotorMsgType: {
                 // Send motor command to local 2680
 
-               if (msgBuffer.buf[0] == 0xBB)
+               //if (msgBuffer.buf[0] == 0xBB)
                  if (vtI2CEnQ(devPtr,vtI2CMotorMsgType,SLAVE_ADDR,msgBuffer.length,msgBuffer.buf,0) != pdTRUE){
                      VT_HANDLE_FATAL_ERROR(VT_I2C_Q_FULL);
                   }
 				break;
+            }
+            case vtI2CWebServerMsgType: {
+                // Send web server to local 2680
+
+               //if (msgBuffer.buf[0] == 0xBB)
+                 if (vtI2CEnQ(devPtr,vtI2CWebServerMsgType,SLAVE_ADDR,msgBuffer.length,msgBuffer.buf,0) != pdTRUE){
+                     VT_HANDLE_FATAL_ERROR(VT_I2C_Q_FULL);
+                  }
+                break;
             }
             case notifyRqstRecvdMsgType: {
                 if(requestSent == 0){
